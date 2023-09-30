@@ -23,5 +23,9 @@
         "https://*/*"
       ]
     }
-  ]
+  ],
+  "suggested_key": {
+    "default": "Ctrl+A",
+    "mac": "MacCtrl+A"
+  }
 }
