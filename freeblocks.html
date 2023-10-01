@@ -1,0 +1,40 @@
+<!-- Copyright 2017 The Chromium Authors. All rights reserved.
+Use of this source code is governed by a BSD-style license that can be
+found in the LICENSE file. -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Water Popup</title>
+    <style>
+        body {
+            text-align: center;
+        }
+
+        #hydrateImage {
+            width: 100px;
+            margin: 5px;
+        }
+
+        button {
+            margin: 5px;
+            outline: none;
+        }
+
+        button:hover {
+            outline: #80deea dotted thick;
+        }
+    </style>
+    <!--
+      - JavaScript and HTML must be in separate files
+     -->
+</head>
+<body>
+<!-- An Alarm delay of less than the minimum 1 minute will fire
+  in approximately 1 minute increments if released -->
+<label for="calendar-url">Free Blocks Slug:</label>
+<input type="text" id="calendar-url"/>
+<a href="https://www.freeblocksapp.com/resources">Need help? Click here</a>
+<button id="free-times-button">Copy free times</button>
+<script src="./scripts/input.js"></script>
+</body>
+</html>
