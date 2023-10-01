@@ -5,7 +5,8 @@
     "contextMenus",
     "clipboardWrite",
     "activeTab",
-    "tabs"
+    "tabs",
+    "scripting"
   ],
 
   "version": "1.0",
@@ -16,16 +17,26 @@
     "48": "images/icon-48.png",
     "128": "images/icon-128.png"
   },
+  "background": {
+    "service_worker": "scripts/background.js"
+  },
   "content_scripts": [
     {
-      "js": ["scripts/run.js"],
       "matches": [
-        "https://*/*"
-      ]
+        "<all_urls>"
+      ],
+      "js": ["scripts/run.js"]
     }
   ],
-  "suggested_key": {
-    "default": "Ctrl+A",
-    "mac": "MacCtrl+A"
+  "action": {
+    "commands": {
+      "_execute_action": {
+        "suggested_key": {
+          "default": "Ctrl+B",
+          "mac": "Command+B"
+        },
+        "description": "Copy your availability to the clipboard."
+      }
+    }
   }
 }
