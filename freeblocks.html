@@ -8,18 +8,17 @@
             text-align: center;
         }
 
-        #hydrateImage {
-            width: 100px;
+        #help {
             margin: 5px;
         }
 
         button {
-            margin: 5px;
+            margin: 8px;
             outline: none;
         }
 
         button:hover {
-            outline: #80deea dotted thick;
+            background-color: aliceblue;
         }
     </style>
     <!--
@@ -31,8 +30,9 @@
   in approximately 1 minute increments if released -->
 <label for="calendar-url">Free Blocks Slug:</label>
 <input type="text" id="calendar-url"/>
-<a target="_blank" href="https://www.freeblocksapp.com/resources">Need help? Click here</a>
-<button id="free-times-button">Copy free times</button>
+<a target="_blank" id="help" href="https://www.freeblocksapp.com/resources">Need help? Click here</a>
+<button disabled id="free-times-button">Copy free times</button>
+<p id="output"></p>
 <script src="./scripts/input.js"></script>
 </body>
 </html>

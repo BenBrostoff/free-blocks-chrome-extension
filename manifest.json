@@ -24,14 +24,6 @@
   "background": {
     "service_worker": "scripts/background.js"
   },
-  "content_scripts": [
-    {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": ["scripts/run.js"]
-    }
-  ],
   "action": {
     "default_title": "Free Blocks",
     "default_popup": "freeblocks.html",

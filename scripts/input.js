@@ -1,29 +1,7 @@
-console.log('Originally input loaded.');
 const sourceInput = document.getElementById('calendar-url');
 const buttonInput = document.getElementById('free-times-button');
+const output = document.getElementById('output');
 const dataHolder = {};
-
-function convertToFormattedString(events) {
-  const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
-  const formattedEvents = events.map(event => {
-    const startTime = new Date(event.start);
-    const endTime = new Date(event.end);
-
-    const weekday = weekdays[startTime.getUTCDay()];
-    const startHour = startTime.getUTCHours();
-    const startMinutes = startTime.getUTCMinutes();
-    const endHour = endTime.getUTCHours();
-    const endMinutes = endTime.getUTCMinutes();
-
-    const startTimeString = `${startHour}:${startMinutes.toString().padStart(2, '0')}`;
-    const endTimeString = `${endHour}:${endMinutes.toString().padStart(2, '0')}`;
-
-    return `${weekday}, ${new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric' }).format(startTime)}, ${startTimeString}${startHour >= 12 ? 'PM' : 'AM'}-${endTimeString}${endHour >= 12 ? 'PM' : 'AM'}`;
-  });
-
-  return formattedEvents;
-}
 
 function convertToFormattedString(events) {
   const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -50,13 +28,15 @@ function convertToFormattedString(events) {
 }
 
 const retrieveData = async (slug) => {
+  output.innerHTML = 'Loading free times...'
   const toCall = `https://www.freeblockscal.com/api/free-times-from-slug/${slug}`;
-  console.log(`Calling ${toCall}`);
-  //
   const response = await fetch(toCall);
   const resJSON = await response.json();
-  // console.log(resJSON);
   const freeTimes = resJSON.free_times;
+  if (!freeTimes) {
+    return;
+  }
+
   const formatted = convertToFormattedString(freeTimes);
   let str = '';
   formatted.forEach(dt => {
@@ -64,34 +44,45 @@ const retrieveData = async (slug) => {
   })
 
   dataHolder.hiddenContent = str;
-  // console.log('Copied', freeTimes);
+  if (dataHolder.hiddenContent) {
+    buttonInput.disabled = false;
+  } else {
+    buttonInput.disabled = true;
+  }
 }
 
 const populate = async () => {
   const data = await chrome.storage.sync.get();
-  const slug = data.calendar_slug;
+  const slug = data && data.calendar_slug;
   if (slug) {
     sourceInput.value = slug;
-    await retrieveData(slug);
+    await retrieveData(slug).finally(() => {
+      output.innerHTML = '';
+    });
   }
 }
-
 populate();
 
 const inputHandler = async function(e) {
   const val = e.target.value;
-  const slugValue = await chrome.storage.sync.set('calendar_slug');
-  console.log('Set', slugValue);
+  const slugValue = await chrome.storage.sync.set({ calendar_slug: val });
+  await retrieveData(val).catch(e => {
+    console.log(e);
+    buttonInput.disabled = true;
+  }).finally(() => {
+    output.innerHTML = '';
+  });
 }
 
 const copyFreeTimes = async function(e) {
-
   navigator.clipboard.writeText(dataHolder.hiddenContent).then(() => {
     //clipboard successfully set
-    console.log('worked');
+    output.innerHTML = 'Copied!';
+    output.style.color = 'green';
   }, (e) => {
     //clipboard write failed, use fallback
-    console.log('failed', e);
+    output.innerHTML = 'An error occurred. Please try again or reach out to ben@freeblocksapp.com';
+    output.style.color = 'red';
   });
 }
 
