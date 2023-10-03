@@ -3,6 +3,37 @@ const buttonInput = document.getElementById('free-times-button');
 const output = document.getElementById('output');
 const dataHolder = {};
 
+const callKlaviyoWithSlug = (slug) => {
+    // TODO - add Klaviyo event here.
+    const url = 'https://a.klaviyo.com/client/events/?company_id=ReYugs';
+    const options = {
+      method: 'POST',
+      headers: {
+        accept: 'application/json',
+        revision: '2023-09-15',
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        data: {
+          type: 'event',
+          attributes: {
+            properties: { slug },
+            metric: {data: {type: 'metric', attributes: {name: 'Added Slug in Chrome Extension'}}},
+            profile: {
+              data: {
+                type: 'profile',
+                attributes: {
+                  email: 'ben.brostoff@freeblocksapp.com',
+                }
+              }
+            }
+          }
+        }})
+    };
+
+    fetch(url, options)
+}
+
 function convertToFormattedString(events) {
   const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -46,6 +77,7 @@ const retrieveData = async (slug) => {
   dataHolder.hiddenContent = str;
   if (dataHolder.hiddenContent) {
     buttonInput.disabled = false;
+    callKlaviyoWithSlug(slug);
   } else {
     buttonInput.disabled = true;
   }
@@ -67,7 +99,6 @@ const inputHandler = async function(e) {
   const val = e.target.value;
   const slugValue = await chrome.storage.sync.set({ calendar_slug: val });
   await retrieveData(val).catch(e => {
-    console.log(e);
     buttonInput.disabled = true;
   }).finally(() => {
     output.innerHTML = '';

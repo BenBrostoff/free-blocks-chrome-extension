@@ -1,12 +1,33 @@
 
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener((e) => {
   // TODO - add Klaviyo event here.
+  const url = 'https://a.klaviyo.com/client/events/?company_id=ReYugs';
+  const options = {
+    method: 'POST',
+    headers: {
+      accept: 'application/json',
+      revision: '2023-09-15',
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      data: {
+        type: 'event',
+        attributes: {
+          properties: {newKey: 'New Value'},
+          metric: {data: {type: 'metric', attributes: {name: 'Installed Chrome Extension'}}},
+          profile: {
+            data: {
+              type: 'profile',
+              attributes: {
+                email: 'ben.brostoff@freeblocksapp.com',
+            }
+          }
+        }
+      }
+    }})
+  };
 
-  // Brostoff set
-  console.log(
-    chrome.storage.sync.get(['calendar_url'])
-  );
-  console.log('logged');
+  fetch(url, options)
 });
 
 // chrome.action.onClicked.addListener(async (tab) => {
