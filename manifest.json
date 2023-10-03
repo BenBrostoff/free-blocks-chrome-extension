@@ -2,7 +2,11 @@
   "manifest_version": 3,
   "name": "Free Blocks",
   "permissions" : [
-    "storage"
+    "storage",
+    "declarativeNetRequest"
+  ],
+  "matches": [
+    "https://www.freeblocksapp.com/*"
   ],
 
   "version": "1.0",
