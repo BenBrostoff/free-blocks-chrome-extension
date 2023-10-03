@@ -2,11 +2,6 @@
   "manifest_version": 3,
   "name": "Free Blocks",
   "permissions" : [
-    "contextMenus",
-    "clipboardWrite",
-    "activeTab",
-    "tabs",
-    "scripting",
     "storage"
   ],
 
@@ -19,7 +14,8 @@
     "128": "images/icon-128.png"
   },
   "host_permissions": [
-    "https://www.freeblockscal.com/*"
+    "https://www.freeblockscal.com/*",
+    "https://www.a.klaviyo.com/*"
   ],
   "background": {
     "service_worker": "scripts/background.js"
