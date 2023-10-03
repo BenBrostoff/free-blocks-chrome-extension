@@ -3,37 +3,6 @@ const buttonInput = document.getElementById('free-times-button');
 const output = document.getElementById('output');
 const dataHolder = {};
 
-const callKlaviyoWithSlug = (slug) => {
-    // TODO - add Klaviyo event here.
-    const url = 'https://a.klaviyo.com/client/events/?company_id=ReYugs';
-    const options = {
-      method: 'POST',
-      headers: {
-        accept: 'application/json',
-        revision: '2023-09-15',
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        data: {
-          type: 'event',
-          attributes: {
-            properties: { slug },
-            metric: {data: {type: 'metric', attributes: {name: 'Added Slug in Chrome Extension'}}},
-            profile: {
-              data: {
-                type: 'profile',
-                attributes: {
-                  email: 'ben.brostoff@freeblocksapp.com',
-                }
-              }
-            }
-          }
-        }})
-    };
-
-    fetch(url, options)
-}
-
 function convertToFormattedString(events) {
   const weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
@@ -61,9 +30,15 @@ function convertToFormattedString(events) {
 const retrieveData = async (slug) => {
   output.innerHTML = 'Loading free times...'
   const toCall = `https://www.freeblockscal.com/api/free-times-from-slug/${slug}`;
-  const response = await fetch(toCall);
-  const resJSON = await response.json();
-  const freeTimes = resJSON.free_times;
+  // const response = await fetch(toCall);
+  const resJSON = await new Promise(resolve => chrome.runtime.sendMessage({
+    url: toCall,
+  }, response => {
+    console.log(response);
+    return resolve(response);
+  }));
+
+  const freeTimes = resJSON && resJSON.free_times;
   if (!freeTimes) {
     return;
   }
@@ -77,7 +52,6 @@ const retrieveData = async (slug) => {
   dataHolder.hiddenContent = str;
   if (dataHolder.hiddenContent) {
     buttonInput.disabled = false;
-    callKlaviyoWithSlug(slug);
   } else {
     buttonInput.disabled = true;
   }
