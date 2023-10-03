@@ -29,12 +29,11 @@ function convertToFormattedString(events) {
 
 const retrieveData = async (slug) => {
   output.innerHTML = 'Loading free times...'
-  const toCall = `https://www.freeblockscal.com/api/free-times-from-slug/${slug}`;
+  const toCall = `https://www.freeblockscal.com/api/free-times-from-slug/${slug}?source=extension`;
   // const response = await fetch(toCall);
   const resJSON = await new Promise(resolve => chrome.runtime.sendMessage({
     url: toCall,
   }, response => {
-    console.log(response);
     return resolve(response);
   }));
 

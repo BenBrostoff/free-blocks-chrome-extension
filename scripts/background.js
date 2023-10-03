@@ -36,7 +36,7 @@ chrome.runtime.onMessage.addListener(
       fetch(url)
         .then(response => response.json())
         .then(response => sendResponse(response))
-        .catch(error => sendResponse(error))
+        .catch(error => sendResponse(error));
       return true;  // Will respond asynchronously.
   });
 

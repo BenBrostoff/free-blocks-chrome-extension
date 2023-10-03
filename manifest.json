@@ -2,13 +2,8 @@
   "manifest_version": 3,
   "name": "Free Blocks",
   "permissions" : [
-    "storage",
-    "declarativeNetRequest"
+    "storage"
   ],
-  "matches": [
-    "https://www.freeblocksapp.com/*"
-  ],
-
   "version": "1.0",
   "description": "Harness the power of sharing your availability.",
   "icons": {
@@ -18,7 +13,7 @@
     "128": "images/icon-128.png"
   },
   "host_permissions": [
-    "https://www.freeblockscal.com/*"
+    "https://www.freeblockscal.com/api/free-times-from-slug/*"
   ],
   "background": {
     "service_worker": "scripts/background.js"
